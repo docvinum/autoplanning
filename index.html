@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Project Management</title>
+    <title>Auto Planning</title>
     <style>
         label, input, button {
             display: block;
@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-    <h1>Project Management</h1>
+    <h1>Auto Planning</h1>
     <h2>Projects</h2>
     <form id="project-form">
         <label for="project_name">Project Name</label>
@@ -24,6 +24,15 @@
         <button type="submit">Add Project</button>
     </form>
 
+    <h2>Projects</h2>
+    <table id="project-table">
+        <tr>
+            <th>Project ID</th>
+            <th>Project Name</th>
+            <th>Project Deadline</th>
+        </tr>
+    </table>
+  
     <h2>Tasks</h2>
     <form id="task-form">
         <label for="task_project_id">Project ID</label>
@@ -48,7 +57,20 @@
 
         <button type="submit">Add Task</button>
     </form>
-
+  
+    <h2>Tasks</h2>
+    <table id="task-table">
+        <tr>
+            <th>Task ID</th>
+            <th>Task Name</th>
+            <th>Task Deadline</th>
+            <th>Task Priority</th>
+            <th>Project ID</th>
+            <th>Task Order</th>
+            <th>Task Duration</th>
+        </tr>
+    </table>
+  
     <h2>Employee Schedule</h2>
     <form id="employee-schedule-form">
         <label for="schedule_start_date">Schedule Start Date</label>
@@ -62,28 +84,6 @@
         
         <button type="submit">Add Schedule</button>
     </form>
-
-  <h2>Projects</h2>
-<table id="project-table">
-    <tr>
-        <th>Project ID</th>
-        <th>Project Name</th>
-        <th>Project Deadline</th>
-    </tr>
-</table>
-
-<h2>Tasks</h2>
-<table id="task-table">
-    <tr>
-        <th>Task ID</th>
-        <th>Task Name</th>
-        <th>Task Deadline</th>
-        <th>Task Priority</th>
-        <th>Project ID</th>
-        <th>Task Order</th>
-        <th>Task Duration</th>
-    </tr>
-</table>
 
 <h2>Employee Schedule</h2>
 <table id="employee-schedule-table">
@@ -142,20 +142,6 @@
         ]);
     });
 
-    document.getElementById('employee-schedule-form').addEventListener('submit', function(event) {
-        event.preventDefault();
-
-        addTableRow(scheduleTable, [
-            event.target.schedule_date.value,
-            event.target.work_time.value,
-        ]);
-    });
-
-    // Disable the Project ID select if there are no projects
-    if (taskProjectIdSelect.childElementCount <= 1) {
-        taskProjectIdSelect.disabled = true;
-    }
-
     function formatDate(date) {
         return date.toISOString().slice(0, 10);
     }
@@ -171,15 +157,27 @@
         const workTimeCell = row.insertCell(-1);
 
         dateCell.textContent = formatDate(date);
-        if (date.getDay() % 7 === 0 || date.getDay() % 7 === 6) {
+        if (isWeekend(date)) {
             dateCell.style.fontStyle = 'italic';
         }
-        if (date.getDay() % 7 === 1 || date.getDay() % 7 === 5) {
+        if (!isWeekend(date)) {
             dateCell.style.fontWeight = 'bold';
         }
 
         workTimeCell.textContent = workTime;
         workTimeCell.contentEditable = 'true';
+
+        // Restrict input to numeric values only
+        workTimeCell.addEventListener('input', function(event) {
+            event.target.textContent = event.target.textContent.replace(/[^0-9]/g, '');
+        });
+    }
+
+    function clearEmployeeScheduleTable() {
+        const numRows = scheduleTable.rows.length;
+        for (let i = numRows - 1; i > 0; i--) {
+            scheduleTable.deleteRow(i);
+        }
     }
 
     document.getElementById('employee-schedule-form').addEventListener('submit', function(event) {
@@ -190,6 +188,8 @@
         const workTime = event.target.work_time.value;
 
         if (startDate <= endDate) {
+            clearEmployeeScheduleTable();
+
             for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
                 addEmployeeScheduleRow(date, workTime);
             }
@@ -197,6 +197,11 @@
             alert('The end date must be after the start date.');
         }
     });
+
+    // Disable the Project ID select if there are no projects
+    if (taskProjectIdSelect.childElementCount <= 1) {
+        taskProjectIdSelect.disabled = true;
+    }
 </script>
 
 
