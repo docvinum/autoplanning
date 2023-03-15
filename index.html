@@ -58,46 +58,89 @@
         <button type="submit">Add Schedule</button>
     </form>
 
+  <h2>Projects</h2>
+<table id="project-table">
+    <tr>
+        <th>Project ID</th>
+        <th>Project Name</th>
+        <th>Project Deadline</th>
+    </tr>
+</table>
+
+<h2>Tasks</h2>
+<table id="task-table">
+    <tr>
+        <th>Task ID</th>
+        <th>Task Name</th>
+        <th>Task Deadline</th>
+        <th>Task Priority</th>
+        <th>Project ID</th>
+        <th>Task Order</th>
+        <th>Task Duration</th>
+    </tr>
+</table>
+
+<h2>Employee Schedule</h2>
+<table id="employee-schedule-table">
+    <tr>
+        <th>Date</th>
+        <th>Work Time</th>
+    </tr>
+</table>
+
+  
 <script>
     let projectIdCounter = 1;
     let taskIdCounter = 1;
+
+    const projectTable = document.getElementById('project-table');
+    const taskTable = document.getElementById('task-table');
+    const scheduleTable = document.getElementById('employee-schedule-table');
+
+    function addTableRow(table, rowData) {
+        const row = table.insertRow(-1);
+        rowData.forEach((cellData) => {
+            const cell = row.insertCell(-1);
+            cell.textContent = cellData;
+        });
+    }
 
     document.getElementById('project-form').addEventListener('submit', function(event) {
         event.preventDefault();
         const projectId = `P${projectIdCounter++}`;
 
-        console.log('Project added:', {
-            project_id: projectId,
-            project_name: event.target.project_name.value,
-            project_deadline: event.target.project_deadline.value,
-        });
+        addTableRow(projectTable, [
+            projectId,
+            event.target.project_name.value,
+            event.target.project_deadline.value,
+        ]);
     });
 
     document.getElementById('task-form').addEventListener('submit', function(event) {
         event.preventDefault();
         const taskId = `T${taskIdCounter++}`;
 
-        console.log('Task added:', {
-            task_id: taskId,
-            task_name: event.target.task_name.value,
-            task_deadline: event.target.task_deadline.value,
-            task_priority: event.target.task_priority.value,
-            project_id: event.target.task_project_id.value,
-            task_order: event.target.task_order.value,
-            task_duration: event.target.task_duration.value,
-        });
+        addTableRow(taskTable, [
+            taskId,
+            event.target.task_name.value,
+            event.target.task_deadline.value,
+            event.target.task_priority.value,
+            event.target.task_project_id.value,
+            event.target.task_order.value,
+            event.target.task_duration.value,
+        ]);
     });
 
     document.getElementById('employee-schedule-form').addEventListener('submit', function(event) {
         event.preventDefault();
-        console.log('Employee schedule added:', {
-            date: event.target.schedule_date.value,
-            work_time: event.target.work_time.value,
-        });
+
+        addTableRow(scheduleTable, [
+            event.target.schedule_date.value,
+            event.target.work_time.value,
+        ]);
     });
 </script>
 
-</script>
 
 </body>
 </html>
