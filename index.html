@@ -1,23 +1,103 @@
 <!DOCTYPE html>
-<html>
-
+<html lang="en">
 <head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width">
-  <title>replit</title>
-  <link href="style.css" rel="stylesheet" type="text/css" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Project Management</title>
+    <style>
+        label, input, button {
+            display: block;
+            margin: 5px 0;
+        }
+    </style>
 </head>
-
 <body>
-  Hello world
-  <script src="script.js"></script>
+    <h1>Project Management</h1>
+    <h2>Projects</h2>
+    <form id="project-form">
+        <label for="project_name">Project Name</label>
+        <input type="text" id="project_name" required>
 
-  <!--
-  This script places a badge on your repl's full-browser view back to your repl's cover
-  page. Try various colors for the theme: dark, light, red, orange, yellow, lime, green,
-  teal, blue, blurple, magenta, pink!
-  -->
-  <script src="https://replit.com/public/js/replit-badge-v2.js" theme="dark" position="bottom-right"></script>
+        <label for="project_deadline">Project Deadline</label>
+        <input type="date" id="project_deadline" required>
+
+        <button type="submit">Add Project</button>
+    </form>
+
+    <h2>Tasks</h2>
+    <form id="task-form">
+        <label for="task_name">Task Name</label>
+        <input type="text" id="task_name" required>
+
+        <label for="task_deadline">Task Deadline</label>
+        <input type="date" id="task_deadline" required>
+
+        <label for="task_priority">Task Priority</label>
+        <input type="number" id="task_priority" required>
+
+        <label for="task_project_id">Project ID</label>
+        <input type="text" id="task_project_id" required>
+
+        <label for="task_order">Task Order in the Project</label>
+        <input type="number" id="task_order" required>
+
+        <label for="task_duration">Task Duration</label>
+        <input type="number" id="task_duration" required>
+
+        <button type="submit">Add Task</button>
+    </form>
+
+    <h2>Employee Schedule</h2>
+    <form id="employee-schedule-form">
+        <label for="schedule_date">Date</label>
+        <input type="date" id="schedule_date" required>
+
+        <label for="work_time">Work Time</label>
+        <input type="number" id="work_time" required>
+
+        <button type="submit">Add Schedule</button>
+    </form>
+
+<script>
+    let projectIdCounter = 1;
+    let taskIdCounter = 1;
+
+    document.getElementById('project-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const projectId = `P${projectIdCounter++}`;
+
+        console.log('Project added:', {
+            project_id: projectId,
+            project_name: event.target.project_name.value,
+            project_deadline: event.target.project_deadline.value,
+        });
+    });
+
+    document.getElementById('task-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        const taskId = `T${taskIdCounter++}`;
+
+        console.log('Task added:', {
+            task_id: taskId,
+            task_name: event.target.task_name.value,
+            task_deadline: event.target.task_deadline.value,
+            task_priority: event.target.task_priority.value,
+            project_id: event.target.task_project_id.value,
+            task_order: event.target.task_order.value,
+            task_duration: event.target.task_duration.value,
+        });
+    });
+
+    document.getElementById('employee-schedule-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+        console.log('Employee schedule added:', {
+            date: event.target.schedule_date.value,
+            work_time: event.target.work_time.value,
+        });
+    });
+</script>
+
+</script>
+
 </body>
-
 </html>
