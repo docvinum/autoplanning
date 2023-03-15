@@ -51,12 +51,15 @@
 
     <h2>Employee Schedule</h2>
     <form id="employee-schedule-form">
-        <label for="schedule_date">Date</label>
-        <input type="date" id="schedule_date" required>
-
+        <label for="schedule_start_date">Schedule Start Date</label>
+        <input type="date" id="schedule_start_date" required>
+        
+        <label for="schedule_end_date">Schedule End Date</label>
+        <input type="date" id="schedule_end_date" required>
+        
         <label for="work_time">Work Time</label>
         <input type="number" id="work_time" required>
-
+        
         <button type="submit">Add Schedule</button>
     </form>
 
@@ -89,7 +92,6 @@
         <th>Work Time</th>
     </tr>
 </table>
-
   
 <script>
     let projectIdCounter = 1;
@@ -153,7 +155,50 @@
     if (taskProjectIdSelect.childElementCount <= 1) {
         taskProjectIdSelect.disabled = true;
     }
+
+    function formatDate(date) {
+        return date.toISOString().slice(0, 10);
+    }
+
+    function isWeekend(date) {
+        const day = date.getDay();
+        return day === 0 || day === 6;
+    }
+
+    function addEmployeeScheduleRow(date, workTime) {
+        const row = scheduleTable.insertRow(-1);
+        const dateCell = row.insertCell(-1);
+        const workTimeCell = row.insertCell(-1);
+
+        dateCell.textContent = formatDate(date);
+        if (date.getDay() % 7 === 0 || date.getDay() % 7 === 6) {
+            dateCell.style.fontStyle = 'italic';
+        }
+        if (date.getDay() % 7 === 1 || date.getDay() % 7 === 5) {
+            dateCell.style.fontWeight = 'bold';
+        }
+
+        workTimeCell.textContent = workTime;
+        workTimeCell.contentEditable = 'true';
+    }
+
+    document.getElementById('employee-schedule-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        const startDate = new Date(event.target.schedule_start_date.value);
+        const endDate = new Date(event.target.schedule_end_date.value);
+        const workTime = event.target.work_time.value;
+
+        if (startDate <= endDate) {
+            for (let date = startDate; date <= endDate; date.setDate(date.getDate() + 1)) {
+                addEmployeeScheduleRow(date, workTime);
+            }
+        } else {
+            alert('The end date must be after the start date.');
+        }
+    });
 </script>
+
 
 </body>
 </html>
