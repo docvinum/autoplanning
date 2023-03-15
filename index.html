@@ -26,6 +26,11 @@
 
     <h2>Tasks</h2>
     <form id="task-form">
+        <label for="task_project_id">Project ID</label>
+        <select id="task_project_id" required>
+            <option value="" disabled selected>Select a Project ID</option>
+        </select>
+
         <label for="task_name">Task Name</label>
         <input type="text" id="task_name" required>
 
@@ -34,9 +39,6 @@
 
         <label for="task_priority">Task Priority</label>
         <input type="number" id="task_priority" required>
-
-        <label for="task_project_id">Project ID</label>
-        <input type="text" id="task_project_id" required>
 
         <label for="task_order">Task Order in the Project</label>
         <input type="number" id="task_order" required>
@@ -96,6 +98,7 @@
     const projectTable = document.getElementById('project-table');
     const taskTable = document.getElementById('task-table');
     const scheduleTable = document.getElementById('employee-schedule-table');
+    const taskProjectIdSelect = document.getElementById('task_project_id');
 
     function addTableRow(table, rowData) {
         const row = table.insertRow(-1);
@@ -114,6 +117,12 @@
             event.target.project_name.value,
             event.target.project_deadline.value,
         ]);
+
+        const option = document.createElement('option');
+        option.value = projectId;
+        option.textContent = projectId;
+        taskProjectIdSelect.appendChild(option);
+        taskProjectIdSelect.disabled = false;
     });
 
     document.getElementById('task-form').addEventListener('submit', function(event) {
@@ -125,7 +134,7 @@
             event.target.task_name.value,
             event.target.task_deadline.value,
             event.target.task_priority.value,
-            event.target.task_project_id.value,
+            taskProjectIdSelect.value,
             event.target.task_order.value,
             event.target.task_duration.value,
         ]);
@@ -139,8 +148,12 @@
             event.target.work_time.value,
         ]);
     });
-</script>
 
+    // Disable the Project ID select if there are no projects
+    if (taskProjectIdSelect.childElementCount <= 1) {
+        taskProjectIdSelect.disabled = true;
+    }
+</script>
 
 </body>
 </html>
