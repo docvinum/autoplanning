@@ -51,9 +51,6 @@
         <label for="task_priority">Task Priority</label>
         <input type="number" id="task_priority" >
 
-        <label for="task_order">Task Order in the Project</label>
-        <input type="number" id="task_order" >
-
         <label for="task_duration">Task Duration</label>
         <input type="number" id="task_duration" required>
 
@@ -87,7 +84,7 @@
         
         <button type="submit">Add Schedule</button>
     </form>
-<button id="generate-employee-schedule">Generate Employee Schedule</button>
+<button id="generate-schedule">Generate Schedule</button>
 
 <h3>Employee Schedule</h3>
 <table id="employee-schedule-table">
@@ -97,7 +94,10 @@
     </tr>
 </table>
   
-<script src="script.js"></script>
+<script src="utilities.js"></script>
+<script src="project.js"></script>
+<script src="task.js"></script>
+<script src="employee-schedule.js"></script>
 
 </body>
 </html>
