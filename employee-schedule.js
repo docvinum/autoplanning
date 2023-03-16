@@ -42,6 +42,15 @@ function clearEmployeeScheduleTable() {
     }
 }
 
+function formatDate(date) {
+    return date.toLocaleString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    });
+}
+
 function populateEmployeeSchedule(startDate, endDate, workTime) {
     let currentDate = new Date(startDate);
     let workTimeIndex = 0;
@@ -49,21 +58,18 @@ function populateEmployeeSchedule(startDate, endDate, workTime) {
     while (currentDate <= endDate) {
         const dayOfWeek = currentDate.getDay();
         const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
-
         const newRow = employeeScheduleTable.insertRow(-1);
         newRow.innerHTML = `
-            <td>${currentDate.toISOString().split('T')[0]}</td>
+        <td>${formatDate(currentDate)}</td>
             <td>
                 <input type="number" min="0" value="${isWeekend ? 0 : workTime[workTimeIndex++]}" />
             </td>
         `;
-
         if (!isWeekend) {
             newRow.querySelector('td:first-child').style.fontWeight = 'bold';
         } else {
             newRow.style.fontStyle = 'italic';
         }
-
         currentDate.setDate(currentDate.getDate() + 1);
     }
 }
