@@ -29,8 +29,8 @@ document.getElementById('generate-schedule').addEventListener('click', function(
 
     const startDate = getNextMonday();
     const endDate = new Date(startDate);
-    endDate.setDate(endDate.getDate() + 4); // Add 4 days to get Friday
-    const workTime = [8, 8, 3, 8, 8]; // Work time for each day from Monday to Friday
+    endDate.setDate(endDate.getDate() + 13); // Add 4 days to get Friday
+    const workTime = [8, 8, 3, 8, 8, 0, 0, 8, 8, 3, 8, 8, 0, 0]; // Work time for each day from Monday to Friday
 
     clearEmployeeScheduleTable();
     populateEmployeeSchedule(startDate, endDate, workTime);
