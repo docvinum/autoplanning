@@ -9,7 +9,7 @@ document.getElementById('task-form').addEventListener('submit', function(event) 
     const taskName = document.getElementById('task_name').value;
     const taskDeadline = document.getElementById('task_deadline').value;
     const taskPriority = document.getElementById('task_priority').value;
-    const projectId = document.getElementById('task_project_id').value;
+    const projectId = taskProjectIdSelect.value;
     const taskDuration = document.getElementById('task_duration').value;
     const taskId = taskIdCounter++;
 
@@ -42,10 +42,11 @@ document.getElementById('generate-task').addEventListener('click', function(even
     }
     const randomProjectOption = projectOptions[getRandomInt(0, projectOptions.length)];
     const projectId = randomProjectOption.value;
-
     const taskOrder = getNextTaskOrderForProject(projectId);
     addTaskRow(taskId, taskName, taskDeadline, taskPriority, projectId, taskOrder, taskDuration);
 });
+
+
 
 function getNextTaskOrderForProject(projectId) {
     if (!projectTaskOrderCount[projectId]) {
