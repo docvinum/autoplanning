@@ -28,7 +28,7 @@ document.getElementById('generate-task').addEventListener('click', function(even
 
     const taskName = generateRandomWord(8);
     const taskDeadline = new Date(new Date().getTime() + 8 * 24 * 60 * 60 * 1000);
-    const taskPriority = getRandomInt(0, 3);
+    const taskPriority = getRandomInt(0, 2);
     const taskDuration = getRandomInt(1, 8);
     const taskId = taskIdCounter++;
 
