@@ -1,5 +1,4 @@
 function autoPlanning() {
-  const taskRows = document.querySelectorAll('#task-table tr:not(:first-child)');
   const scheduleRows = document.querySelectorAll('#employee-schedule-table tr:not(:first-child)');
   const planningTable = document.getElementById('employee-planning-table');
 
@@ -18,6 +17,9 @@ function autoPlanning() {
     newRow.insertCell(-1).textContent = '';
     newRow.insertCell(-1).textContent = '';
   });
+
+  // Fetch the task rows every time the function is executed
+  const taskRows = document.querySelectorAll('#task-table tr:not(:first-child)');
 
   taskRows.forEach(taskRow => {
     // Extract task information
