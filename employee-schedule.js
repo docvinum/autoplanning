@@ -51,18 +51,34 @@ function formatDate(date) {
     });
 }
 
-function populateEmployeeSchedule(startDate, endDate, workTime) {
+function populateEmployeeSchedule(startDate, endDate) {
     let currentDate = new Date(startDate);
-    let workTimeIndex = 0;
 
     while (currentDate <= endDate) {
         const dayOfWeek = currentDate.getDay();
+        let workTime;
+
+        switch (dayOfWeek) {
+            case 1: // Monday
+            case 2: // Tuesday
+            case 4: // Thursday
+            case 5: // Friday
+                workTime = 8;
+                break;
+            case 3: // Wednesday
+                workTime = 3;
+                break;
+            default: // Saturday and Sunday
+                workTime = 0;
+                break;
+        }
+
         const isWeekend = dayOfWeek === 0 || dayOfWeek === 6;
         const newRow = employeeScheduleTable.insertRow(-1);
         newRow.innerHTML = `
         <td>${formatDate(currentDate)}</td>
             <td>
-                <input type="number" min="0" value="${isWeekend ? 0 : workTime[workTimeIndex++]}" />
+                <input type="number" min="0" value="${workTime}" />
             </td>
         `;
         if (!isWeekend) {

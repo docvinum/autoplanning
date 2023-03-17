@@ -27,8 +27,10 @@ document.getElementById('generate-task').addEventListener('click', function(even
     event.preventDefault();
 
     const taskName = generateRandomWord(8);
-    const taskDeadline = new Date(new Date().getTime() + 8 * 24 * 60 * 60 * 1000);
-    const taskPriority = getRandomInt(0, 2);
+    const taskDeadline = '';
+    const taskPriority = 0;
+    // const taskDeadline = new Date(new Date().getTime() + 8 * 24 * 60 * 60 * 1000);
+    // const taskPriority = getRandomInt(0, 2);
     const taskDuration = getRandomInt(1, 8);
     const taskId = taskIdCounter++;
 
@@ -50,7 +52,7 @@ document.getElementById('generate-task').addEventListener('click', function(even
 
 function getNextTaskOrderForProject(projectId) {
     if (!projectTaskOrderCount[projectId]) {
-        projectTaskOrderCount[projectId] = 0;
+        projectTaskOrderCount[projectId] = 1;
     }
     return projectTaskOrderCount[projectId]++;
 }
