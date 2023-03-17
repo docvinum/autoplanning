@@ -1,43 +1,54 @@
-document.getElementById('plan-tasks').addEventListener('click', function (event) {
-    event.preventDefault();
-    planTasks();
-});
+function autoPlanning() {
+  const taskRows = document.querySelectorAll('#task-table tr:not(:first-child)');
+  const scheduleRows = document.querySelectorAll('#employee-schedule-table tr:not(:first-child)');
+  const planningTable = document.getElementById('employee-planning-table');
 
-function planTasks() {
-    const tasks = getTasks();
-    const projects = getProjects();
-    const schedule = getEmployeeSchedule();
+  // Clear employee-planning-table
+  while (planningTable.rows.length > 1) {
+    planningTable.deleteRow(1);
+  }
 
-    // Process tasks based on the rules
-    applyRules(tasks, projects, schedule);
+  scheduleRows.forEach(scheduleRow => {
+    const newRow = planningTable.insertRow(-1);
 
-    // Dispatch tasks to the employee-schedule-table
-    dispatchTasks(tasks, schedule);
+    // Clone the existing schedule row structure
+    newRow.innerHTML = scheduleRow.innerHTML;
 
-    // Check rules 7, 8 and 9
-    checkRules(tasks, schedule);
+    // Add an empty cell for Workload and Tasks columns
+    newRow.insertCell(-1).textContent = '';
+    newRow.insertCell(-1).textContent = '';
+  });
+
+  taskRows.forEach(taskRow => {
+    // Extract task information
+    const taskId = taskRow.cells[0].textContent;
+    const taskDuration = parseInt(taskRow.cells[6].textContent);
+
+    // Iterate through scheduleRows to find an available slot
+    for (let i = 0; i < scheduleRows.length; i++) {
+      const scheduleRow = scheduleRows[i];
+      const planningRow = planningTable.rows[i + 1];
+      const availableWorkTimeInput = scheduleRow.cells[1].querySelector('input');
+      const availableWorkTime = parseInt(availableWorkTimeInput.value);
+
+      if (availableWorkTime >= taskDuration) {
+        // Assign task to the employee's schedule
+        availableWorkTimeInput.value = availableWorkTime - taskDuration;
+
+        // Update Workload and Tasks columns in the planning table
+        const workloadCell = planningRow.cells[2];
+        const tasksCell = planningRow.cells[3];
+
+        workloadCell.textContent = parseInt(workloadCell.textContent || '0') + taskDuration;
+        tasksCell.textContent = tasksCell.textContent
+          ? tasksCell.textContent + ', ' + taskId
+          : taskId;
+
+        // Break the loop as the task has been assigned
+        break;
+      }
+    }
+  });
 }
 
-function getTasks() {
-    // Retrieve tasks from the task-table
-}
-
-function getProjects() {
-    // Retrieve projects from the project-table
-}
-
-function getEmployeeSchedule() {
-    // Retrieve the employee schedule from the employee-schedule-table
-}
-
-function applyRules(tasks, projects, schedule) {
-    // Implement rules 1 to 6
-}
-
-function dispatchTasks(tasks, schedule) {
-    // Dispatch tasks to the employee-schedule-table
-}
-
-function checkRules(tasks, schedule) {
-    // Check rules 7, 8, and 9 and display appropriate warnings
-}
+document.getElementById('autoplanning').addEventListener('click', autoPlanning);
