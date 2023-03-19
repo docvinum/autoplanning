@@ -6,8 +6,20 @@ function autoplan() {
   const projects = getProjects();
   console.log('Projects:', projects);
 
-  const tasks = getTasks();
+  let tasks = getTasks();
   console.log('Tasks:', tasks);
+
+  // Update tasks' deadlines
+  tasks = tasks.map(task => {
+    const project = projects.find(p => p.id === task.projectId);
+
+    // If the task has no deadline or its deadline is after the project's deadline, set the task's deadline to the project's deadline
+    if (!task.deadline || (project.deadline && task.deadline > project.deadline)) {
+      task.deadline = project.deadline;
+    }
+
+    return task;
+  });
 
   const schedule = getEmployeeSchedule();
   console.log('Employee Schedule:', schedule);
@@ -19,11 +31,12 @@ function autoplan() {
     projectTasks.sort((a, b) => b.priority - a.priority);
     assignTasks(schedule, projectTasks);
   }
-  
+
   console.log('Planning:', schedule);
-  
+
   displayEmployeePlanning(schedule);
 }
+
 
 function getProjects() {
   const projectTable = document.getElementById('project-table');
