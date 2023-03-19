@@ -1,104 +1,177 @@
-function autoPlanning() {
-  const scheduleRows = document.querySelectorAll('#employee-schedule-table tr:not(:first-child)');
-  const planningTable = document.getElementById('employee-planning-table');
+document.getElementById('autoplanning').addEventListener('click', function () {
+  autoplan();
+});
 
-  // Clear employee-planning-table
-  while (planningTable.rows.length > 1) {
-    planningTable.deleteRow(1);
+// function autoplan() {
+  // const schedule = getEmployeeSchedule();
+  // const tasks = getTasks();
+  // const projects = getProjects();
+
+  // Sort projects by deadline
+  // projects.sort((a, b) => {
+    // const aDeadline = a.deadline ? a.deadline.getTime() : Infinity;
+    // const bDeadline = b.deadline ? b.deadline.getTime() : Infinity;
+
+    // return aDeadline - bDeadline;
+  // });
+
+  // Process each project
+  // projects.forEach(project => {
+    // Get tasks belonging to the current project
+    // const projectTasks = tasks.filter(task => task.projectId === project.id);
+
+    // Sort tasks by priority, from highest to lowest
+    // projectTasks.sort((a, b) => b.priority - a.priority);
+
+    // Assign tasks to the schedule
+    // assignTasks(schedule, projectTasks);
+  // });
+
+  // Display the resulting schedul
+  // displayEmployeePlanning(schedule);
+// }
+
+function autoplan() {
+  const projects = getProjects();
+  console.log('Projects:', projects);
+
+  const tasks = getTasks();
+  console.log('Tasks:', tasks);
+
+  const schedule = getEmployeeSchedule();
+  console.log('Employee Schedule:', schedule);
+
+  projects.sort((a, b) => a.deadline - b.deadline);
+
+  for (const project of projects) {
+    const projectTasks = tasks.filter(task => task.projectId === project.id);
+    projectTasks.sort((a, b) => b.priority - a.priority);
+    assignTasks(schedule, projectTasks);
+  }
+  
+  console.log('Planning:', schedule);
+  
+  displayEmployeePlanning(schedule);
+}
+
+
+
+
+function getProjects() {
+  const projectTable = document.getElementById('project-table');
+  const projects = [];
+
+  for (let i = 1; i < projectTable.rows.length; i++) {
+    const row = projectTable.rows[i];
+    const id = parseInt(row.cells[0].textContent.trim());
+    const name = row.cells[1].textContent.trim();
+    const deadlineText = row.cells[2].textContent.trim();
+    const deadline = deadlineText ? new Date(deadlineText) : null;
+
+    const project = {
+      id: id,
+      name: name,
+      deadline: deadline,
+    };
+
+    projects.push(project);
   }
 
-  scheduleRows.forEach(scheduleRow => {
-    const newRow = planningTable.insertRow(-1);
+  return projects;
+}
 
-    // Clone the existing schedule row structure
-    newRow.innerHTML = scheduleRow.innerHTML;
+function getEmployeeSchedule() {
+  const schedule = [];
+  const rows = employeeScheduleTable.querySelectorAll("tr:not(:first-child)");
 
-    // Add an empty cell for Workload and Tasks columns
-    newRow.insertCell(-1).textContent = '';
-    newRow.insertCell(-1).textContent = '';
+  rows.forEach(row => {
+    const cells = row.querySelectorAll("td");
+    const date = new Date(cells[0].textContent);
+    const workTime = parseInt(cells[1].querySelector("input").value);
+
+    schedule.push({
+      date,
+      workTime,
+      workload: 0, // Initialize workload as 0
+      tasks: [],
+    });
   });
 
-  // Fetch the task rows every time the function is executed
-  const taskRows = document.querySelectorAll('#task-table tr:not(:first-child)');
+  return schedule;
+}
 
-  taskRows.forEach(taskRow => {
-    // Extract task information
-    const taskId = taskRow.cells[0].textContent;
-    const taskDuration = parseInt(taskRow.cells[6].textContent);
+function getTasks() {
+  const taskTable = document.getElementById('task-table');
+  const tasks = [];
 
-    // Iterate through scheduleRows to find an available slot
-    for (let i = 0; i < scheduleRows.length; i++) {
-      const scheduleRow = scheduleRows[i];
-      const planningRow = planningTable.rows[i + 1];
-      const availableWorkTimeInput = scheduleRow.cells[1].querySelector('input');
-      const availableWorkTime = parseInt(availableWorkTimeInput.value);
+  for (let i = 1; i < taskTable.rows.length; i++) {
+    const row = taskTable.rows[i];
+    const taskId = parseInt(row.cells[0].textContent.trim());
+    const projectId = parseInt(row.cells[4].textContent.trim());
+    const taskName = row.cells[1].textContent.trim();
+    const taskDuration = parseInt(row.cells[6].textContent.trim());
+    const taskPriority = parseInt(row.cells[3].textContent.trim());
+    const taskDeadline = row.cells[2].textContent.trim() ? new Date(row.cells[5].textContent.trim()) : null;
 
-      if (availableWorkTime >= taskDuration) {
-        // Assign task to the employee's schedule
-        availableWorkTimeInput.value = availableWorkTime - taskDuration;
+    const task = {
+      id: taskId,
+      projectId: projectId,
+      name: taskName,
+      duration: taskDuration,
+      priority: taskPriority,
+      deadline: taskDeadline,
+    };
 
-        // Update Workload and Tasks columns in the planning table
-        const workloadCell = planningRow.cells[2];
-        const tasksCell = planningRow.cells[3];
+    tasks.push(task);
+  }
 
-        workloadCell.textContent = parseInt(workloadCell.textContent || '0') + taskDuration;
-        tasksCell.textContent = tasksCell.textContent
-          ? tasksCell.textContent + ', ' + taskId
-          : taskId;
+  return tasks;
+}
 
-        // Break the loop as the task has been assigned
-        break;
+
+function assignTasks(schedule, tasks) {
+  tasks.forEach(task => {
+    let remainingDuration = task.duration;
+
+    for (let i = 0; i < schedule.length && remainingDuration > 0; i++) {
+      const day = schedule[i];
+
+      if (day.workTime > 0) {
+        const taskDuration = Math.min(remainingDuration, day.workTime);
+
+        day.remainingTime = day.workTime - taskDuration;
+        day.workload += taskDuration;
+        day.tasks.push({
+          id: task.id,
+          name: task.name,
+          duration: taskDuration,
+        });
+
+        remainingDuration -= taskDuration;
       }
     }
   });
+
+  return schedule;
 }
 
-function checkConditions() {
-  const taskRows = document.querySelectorAll('#task-table tr:not(:first-child)');
-  const scheduleRows = document.querySelectorAll('#employee-schedule-table tr:not(:first-child)');
-  
-  let totalTaskDuration = 0;
-  let totalWorkCapacity = 0;
-  let tasksExceedingDailyWorkTime = [];
+function displayEmployeePlanning(schedule) {
+  const employeePlanningTable = document.getElementById("employee-planning-table");
 
-  // Calculate total task duration
-  taskRows.forEach(taskRow => {
-    const taskDuration = parseInt(taskRow.cells[6].textContent);
-    const taskId = taskRow.cells[0].textContent;
+  // Clear the existing table rows (except the header)
+  while (employeePlanningTable.rows.length > 1) {
+    employeePlanningTable.deleteRow(1);
+  }
 
-    totalTaskDuration += taskDuration;
+  schedule.forEach(day => {
+    const newRow = employeePlanningTable.insertRow(-1);
 
-    // Check if the task can be done in 1 day maximum
-    if (taskDuration > 8) {
-      tasksExceedingDailyWorkTime.push(taskId);
-    }
+    newRow.innerHTML = `
+      <td>${formatDate(day.date)}</td>
+      <td>${day.workTime}</td>
+      <td>${day.workload}</td>
+      <td>${day.remainingTime}</td>
+      <td>${day.tasks.map(task => `${task.name} (${task.duration}h)`).join(", ")}</td>
+    `;
   });
-
-  // Calculate total work capacity
-  scheduleRows.forEach(scheduleRow => {
-    const availableWorkTimeInput = scheduleRow.cells[1].querySelector('input');
-    const availableWorkTime = parseInt(availableWorkTimeInput.value);
-
-    totalWorkCapacity += availableWorkTime;
-  });
-
-  if (totalTaskDuration > totalWorkCapacity) {
-    alert(`The sum of all task durations (${totalTaskDuration}) exceeds the total work capacity of the employee (${totalWorkCapacity}). Please adjust tasks or the employee's schedule.`);
-    return false;
-  }
-
-  if (tasksExceedingDailyWorkTime.length > 0) {
-    alert(`The following tasks cannot be completed in 1 day: ${tasksExceedingDailyWorkTime.join(', ')}. Please adjust their durations or the daily work time.`);
-    return false;
-  }
-
-  return true;
 }
-
-function handleClick() {
-  if (checkConditions()) {
-    autoPlanning();
-  }
-}
-
-document.getElementById('autoplanning').addEventListener('click', handleClick);

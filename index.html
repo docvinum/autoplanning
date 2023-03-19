@@ -25,6 +25,7 @@
         <button type="submit">Add Project</button>
     </form>
     <h3>Project list</h3>
+  <button id="generate-project">Generate Project</button>
     <table id="project-table">
         <tr>
             <th>Project ID</th>
@@ -32,7 +33,6 @@
             <th>Project Deadline</th>
         </tr>
     </table>
-  <button id="generate-project">Generate Project</button>
 
     <h2>Tasks</h2>
     <form id="task-form">
@@ -57,6 +57,7 @@
     </form>
 
     <h3>Task list</h3>
+    <button id="generate-task">Generate Task</button>
     <table id="task-table">
         <tr>
             <th>Task ID</th>
@@ -68,7 +69,6 @@
             <th>Task Duration</th>
         </tr>
     </table>
-    <button id="generate-task">Generate Task</button>
 
     <h2>Employee Availability</h2>
     <form id="employee-schedule-form">
@@ -94,16 +94,17 @@
 </table>
 
 <h3>Employee Planning</h3>
-  <button id="autoplanning">Auto Planning</button>
+    <button id="autoplanning">Auto Planning</button>
 <table id="employee-planning-table">
     <tr>
         <th>Date</th>
         <th>Work Time</th>
         <th>Workload</th>
+        <th>Remaining Time</th>
         <th>Tasks</th>
     </tr>
 </table>
-  
+
 <script src="utilities.js"></script>
 <script src="project.js"></script>
 <script src="task.js"></script>
