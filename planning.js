@@ -99,31 +99,50 @@ function getTasks() {
 }
 
 function assignTasks(schedule, tasks) {
-  tasks.forEach(task => {
+  const taskOrder = [];
+  const projectsByDeadline = getProjects().sort((a, b) => a.deadline - b.deadline);
+
+  // Add tasks with priority 2 to taskOrder
+  for (const project of projectsByDeadline) {
+    const priority2Tasks = tasks.filter(task => task.projectId === project.id && task.priority === 2);
+    taskOrder.push(...priority2Tasks);
+  }
+
+  // Add the other tasks to taskOrder
+  for (const project of projectsByDeadline) {
+    const otherTasks = tasks
+      .filter(task => task.projectId === project.id && !taskOrder.includes(task))
+      .sort((a, b) => a.id - b.id);
+    taskOrder.push(...otherTasks);
+  }
+
+  // Assign tasks from taskOrder to the planning
+  for (const task of taskOrder) {
     let remainingDuration = task.duration;
 
     for (let i = 0; i < schedule.length && remainingDuration > 0; i++) {
       const day = schedule[i];
 
-      if (day.remainingTime > 0) {
-        const taskDuration = Math.min(remainingDuration, day.remainingTime);
+      if (day.workTime > day.workload) {
+        const taskDuration = Math.min(remainingDuration, day.workTime - day.workload);
 
-        day.remainingTime -= taskDuration;
         day.workload += taskDuration;
+        day.remainingTime = day.workTime - day.workload;
         day.tasks.push({
           id: task.id,
           name: task.name,
+          priority: task.priority,
           duration: taskDuration,
-          priority: task.priority // Add task priority
         });
 
         remainingDuration -= taskDuration;
       }
     }
-  });
+  }
 
   return schedule;
 }
+
 
 function displayEmployeePlanning(schedule) {
   const employeePlanningTable = document.getElementById("employee-planning-table");
