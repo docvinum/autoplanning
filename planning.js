@@ -67,7 +67,6 @@ function highlightDeadlineWarnings(schedule, tasks) {
   });
 }
 
-
 function getProjects() {
   const projectTable = document.getElementById('project-table');
   const projects = [];
@@ -147,7 +146,9 @@ function assignTasks(schedule, tasks) {
 
   // Add tasks with priority 2 to taskOrder
   for (const project of projectsByDeadline) {
-    const priority2Tasks = tasks.filter(task => task.projectId === project.id && task.priority === 2);
+    const priority2Tasks = tasks
+      .filter(task => task.projectId === project.id && task.priority === 2)
+      .sort((a, b) => a.id - b.id);
     taskOrder.push(...priority2Tasks);
   }
 
@@ -158,6 +159,8 @@ function assignTasks(schedule, tasks) {
       .sort((a, b) => a.id - b.id);
     taskOrder.push(...otherTasks);
   }
+
+  console.log('Task Order:', taskOrder); // Print the task order
 
   // Assign tasks from taskOrder to the planning
   for (const task of taskOrder) {
@@ -185,6 +188,8 @@ function assignTasks(schedule, tasks) {
 
   return schedule;
 }
+
+
 
 
 function displayEmployeePlanning(schedule) {
