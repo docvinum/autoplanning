@@ -3,10 +3,19 @@ const projectTable = document.getElementById('project-table');
 
 function addProjectRow(projectId, projectName, projectDeadline) {
     const newRow = projectTable.insertRow(-1);
+
+    // Format the date using Intl.DateTimeFormat
+    const formattedDate = new Intl.DateTimeFormat('en-US', {
+        weekday: 'short',
+        year: 'numeric',
+        month: 'short',
+        day: '2-digit'
+    }).format(projectDeadline);
+
     newRow.innerHTML = `
         <td>${projectId}</td>
         <td>${projectName}</td>
-        <td>${projectDeadline}</td>
+        <td>${formattedDate}</td>
     `;
 }
 
@@ -31,13 +40,14 @@ document.getElementById('project-form').addEventListener('submit', function(even
     const projectDeadline = document.getElementById('project_deadline').value;
     let projectId = projectIdCounter++;
 
-    addProjectRow(projectId, projectName, projectDeadline);
+    addProjectRow(projectId, projectName, new Date(projectDeadline));
     updateTaskProjectSelect(projectId, projectName);
 
     // Clear the input fields
     document.getElementById('project_name').value = '';
     document.getElementById('project_deadline').value = '';
 });
+
 
 document.getElementById('generate-project').addEventListener('click', function(event) {
     event.preventDefault();
@@ -46,6 +56,6 @@ document.getElementById('generate-project').addEventListener('click', function(e
     const projectDeadline = new Date(new Date().getTime() + 15 * 24 * 60 * 60 * 1000);
     let projectId = projectIdCounter++;
 
-    addProjectRow(projectId, projectName, projectDeadline);
+    addProjectRow(projectId, projectName, new Date(projectDeadline));
     updateTaskProjectSelect(projectId, projectName);
 });

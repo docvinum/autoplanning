@@ -25,9 +25,6 @@ function autoplan() {
   displayEmployeePlanning(schedule);
 }
 
-
-
-
 function getProjects() {
   const projectTable = document.getElementById('project-table');
   const projects = [];
