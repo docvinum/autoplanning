@@ -6,6 +6,10 @@
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Auto Planning</title>
     <style>
+      body {
+        width: 90vw;
+        margin-left: 5vw;
+      },
         label, input, button {
             display: block;
             margin: 5px 0;
@@ -14,52 +18,73 @@
     </style>
 </head>
 <body>
-    <h1>Auto Planning</h1>
-    <h2>Projects</h2>
-    <form id="project-form">
+<h1 class="mb-4">Auto Planning</h1>
+<h2 class="mb-3">Projects</h2>
+<form id="project-form" class="mb-3">
+    <div class="form-group">
         <label for="project_name">Project Name</label>
-        <input type="text" id="project_name" required>
+        <input type="text" id="project_name" class="form-control" required>
+    </div>
 
+    <div class="form-group">
         <label for="project_deadline">Project Deadline</label>
-        <input type="date" id="project_deadline" required>
+        <input type="date" id="project_deadline" class="form-control" required>
+    </div>
 
-        <button type="submit">Add Project</button>
-    </form>
-    <h3>Project list</h3>
-  <button id="generate-project">Generate Project</button>
-    <table id="project-table">
+    <button type="submit" class="btn btn-outline-primary">Add Project</button>
+</form>
+
+  
+<h3 class="mb-3">Project list</h3>
+<button id="generate-project" class="btn btn-primary mb-3">Random Project</button>
+<table id="project-table" class="table table-striped table-bordered">
+    <thead class="thead-dark">
         <tr>
             <th>Project ID</th>
             <th>Project Name</th>
             <th>Project Deadline</th>
         </tr>
-    </table>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
 
-    <h2>Tasks</h2>
-    <form id="task-form">
+<h2 class="mb-3">Tasks</h2>
+<form id="task-form" class="mb-3">
+    <div class="form-group">
         <label for="task_project_id">Project</label>
-        <select id="task_project_id" required>
+        <select id="task_project_id" class="form-control" required>
             <option value="" disabled selected>Select a Project ID</option>
         </select>
+    </div>
 
+    <div class="form-group">
         <label for="task_name">Task Name</label>
-        <input type="text" id="task_name" required>
+        <input type="text" id="task_name" class="form-control" required>
+    </div>
 
+    <div class="form-group">
         <label for="task_deadline">Task Deadline</label>
-        <input type="date" id="task_deadline" >
+        <input type="date" id="task_deadline" class="form-control">
+    </div>
 
+    <div class="form-group">
         <label for="task_priority">Task Priority</label>
-        <input type="number" id="task_priority" >
+        <input type="number" id="task_priority" class="form-control">
+    </div>
 
+    <div class="form-group">
         <label for="task_duration">Task Duration</label>
-        <input type="number" id="task_duration" required>
+        <input type="number" id="task_duration" class="form-control" required>
+    </div>
 
-        <button type="submit">Add Task</button>
-    </form>
+    <button type="submit" class="btn btn-outline-primary">Add Task</button>
+</form>
 
-    <h3>Task list</h3>
-    <button id="generate-task">Generate Task</button>
-    <table id="task-table">
+<h3 class="mb-3">Task list</h3>
+<button id="generate-task" class="btn btn-primary mb-3">Random Task</button>
+<table id="task-table" class="table table-striped table-bordered">
+    <thead class="thead-dark">
         <tr>
             <th>Task ID</th>
             <th>Task Name</th>
@@ -69,29 +94,40 @@
             <th>Task Order</th>
             <th>Task Duration</th>
         </tr>
-    </table>
+    </thead>
+    <tbody>
+    </tbody>
+</table>
 
-    <h2>Employee Availability</h2>
-    <form id="employee-schedule-form">
-        <label for="schedule_start_date">Schedule Start Date</label>
-        <input type="date" id="schedule_start_date" required>
-        
-        <label for="schedule_end_date">Schedule End Date</label>
-        <input type="date" id="schedule_end_date" required>
-        
-        <label for="work_time">Work Time</label>
-        <input type="number" id="work_time" required>
-        
-        <button type="submit">Add Schedule</button>
-    </form>
-<button id="generate-schedule">Generate Schedule</button>
+<h2 class="mb-3">Employee Availability</h2>
+<form id="employee-schedule-form" class="form-inline">
+    <div class="form-group mr-2">
+        <label for="schedule_start_date" class="mr-1">Schedule Start Date</label>
+        <input type="date" id="schedule_start_date" class="form-control" required>
+    </div>
+    <div class="form-group mr-2">
+        <label for="schedule_end_date" class="mr-1">Schedule End Date</label>
+        <input type="date" id="schedule_end_date" class="form-control" required>
+    </div>
+    <div class="form-group mr-2">
+        <label for="work_time" class="mr-1">Work Time</label>
+        <input type="number" id="work_time" class="form-control" required>
+    </div>
+    <button type="submit" class="btn btn-outline-primary">Schedule</button>
+</form>
+<button id="generate-schedule" class="btn btn-primary mt-3">Generate Schedule</button>
 
-<h3>Employee Schedule</h3>
-<table id="employee-schedule-table">
+<h3 class="mb-3">Employee Schedule</h3>
+<table id="employee-schedule-table" class="table table-striped">
+  <thead class="thead-dark">
     <tr>
-        <th>Date</th>
-        <th>Work Time</th>
+      <th>Date</th>
+      <th>Work Time</th>
     </tr>
+  </thead>
+  <tbody>
+    <!-- Table rows go here -->
+  </tbody>
 </table>
 
 <h3 class="mb-3">Employee Planning</h3>

@@ -2,35 +2,6 @@ document.getElementById('autoplanning').addEventListener('click', function () {
   autoplan();
 });
 
-// function autoplan() {
-  // const schedule = getEmployeeSchedule();
-  // const tasks = getTasks();
-  // const projects = getProjects();
-
-  // Sort projects by deadline
-  // projects.sort((a, b) => {
-    // const aDeadline = a.deadline ? a.deadline.getTime() : Infinity;
-    // const bDeadline = b.deadline ? b.deadline.getTime() : Infinity;
-
-    // return aDeadline - bDeadline;
-  // });
-
-  // Process each project
-  // projects.forEach(project => {
-    // Get tasks belonging to the current project
-    // const projectTasks = tasks.filter(task => task.projectId === project.id);
-
-    // Sort tasks by priority, from highest to lowest
-    // projectTasks.sort((a, b) => b.priority - a.priority);
-
-    // Assign tasks to the schedule
-    // assignTasks(schedule, projectTasks);
-  // });
-
-  // Display the resulting schedul
-  // displayEmployeePlanning(schedule);
-// }
-
 function autoplan() {
   const projects = getProjects();
   console.log('Projects:', projects);
@@ -171,7 +142,7 @@ function displayEmployeePlanning(schedule) {
       <td>${day.workTime}</td>
       <td>${day.workload}</td>
       <td>${day.remainingTime}</td>
-      <td>${day.tasks.map(task => `${task.name} (${task.duration}h)`).join(", ")}</td>
+      <td>${day.tasks.map(task => `${task.name} id:${task.id} p:${task.priority} d:${task.duration}`).join(", ")}</td>
     `;
   });
 }
