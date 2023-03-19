@@ -13,7 +13,6 @@ function autoplan() {
   tasks = tasks.map(task => {
     const project = projects.find(p => p.id === task.projectId);
 
-    // If the task has no deadline or its deadline is after the project's deadline, set the task's deadline to the project's deadline
     if (!task.deadline || (project.deadline && task.deadline > project.deadline)) {
       task.deadline = project.deadline;
     }
@@ -35,6 +34,37 @@ function autoplan() {
   console.log('Planning:', schedule);
 
   displayEmployeePlanning(schedule);
+  highlightDeadlineWarnings(schedule, tasks);
+}
+
+function highlightDeadlineWarnings(schedule, tasks) {
+  const employeePlanningTable = document.getElementById("employee-planning-table");
+  const rows = employeePlanningTable.querySelectorAll("tr:not(:first-child)");
+
+  rows.forEach((row, rowIndex) => {
+    if (schedule[rowIndex]) {
+      const day = schedule[rowIndex];
+      const taskIdsCell = row.querySelector("td:nth-child(5)");
+      const taskIds = taskIdsCell.textContent.split(", ").map(id => parseInt(id));
+
+      taskIds.forEach((taskId, taskIndex) => {
+        const task = tasks.find(t => t.id === taskId);
+
+        if (task && task.deadline && day.date >= task.deadline) {
+          const cellsToHighlight = [
+            row.querySelector(`td:nth-child(5)`),
+            row.querySelector(`td:nth-child(6)`),
+            row.querySelector(`td:nth-child(7)`),
+            row.querySelector(`td:nth-child(8)`),
+          ];
+
+          cellsToHighlight.forEach(cell => {
+            cell.classList.add("bg-warning");
+          });
+        }
+      });
+    }
+  });
 }
 
 

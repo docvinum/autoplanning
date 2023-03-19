@@ -21,15 +21,17 @@
 <h1 class="mb-4">Auto Planning</h1>
 <h2 class="mb-3">Projects</h2>
 <form id="project-form" class="mb-3">
-    <div class="form-group">
+  <div class="form-row">
+    <div class="form-group col-md-2">
         <label for="project_name">Project Name</label>
         <input type="text" id="project_name" class="form-control" required>
     </div>
 
-    <div class="form-group">
+    <div class="form-group col-md-2">
         <label for="project_deadline">Project Deadline</label>
         <input type="date" id="project_deadline" class="form-control" required>
     </div>
+  </div>
 
     <button type="submit" class="btn btn-outline-primary">Add Project</button>
 </form>
@@ -51,31 +53,33 @@
 
 <h2 class="mb-3">Tasks</h2>
 <form id="task-form" class="mb-3">
-    <div class="form-group">
+    <div class="form-row">
+    <div class="form-group col-md-2">
         <label for="task_project_id">Project</label>
         <select id="task_project_id" class="form-control" required>
             <option value="" disabled selected>Select a Project ID</option>
         </select>
-    </div>
-
-    <div class="form-group">
+      </div>
+      
+      <div class="form-group col-md-2">
         <label for="task_name">Task Name</label>
         <input type="text" id="task_name" class="form-control" required>
-    </div>
-
-    <div class="form-group">
+      </div>
+      
+      <div class="form-group col-md-2">
         <label for="task_deadline">Task Deadline</label>
         <input type="date" id="task_deadline" class="form-control">
-    </div>
-
-    <div class="form-group">
+      </div>
+      
+      <div class="form-group col-md-2">
         <label for="task_priority">Task Priority</label>
         <input type="number" id="task_priority" class="form-control">
-    </div>
-
-    <div class="form-group">
+      </div>
+      
+      <div class="form-group col-md-2">
         <label for="task_duration">Task Duration</label>
         <input type="number" id="task_duration" class="form-control" required>
+      </div>
     </div>
 
     <button type="submit" class="btn btn-outline-primary">Add Task</button>
