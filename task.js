@@ -8,7 +8,8 @@ document.getElementById('task-form').addEventListener('submit', function(event) 
 
     const taskName = document.getElementById('task_name').value;
     const taskDeadline = document.getElementById('task_deadline').value;
-    const taskPriority = document.getElementById('task_priority').value;
+    let taskPriority = document.getElementById('task_priority').value;
+    taskPriority = taskPriority === '' ? 0 : parseInt(taskPriority); // Add this line
     const projectId = taskProjectIdSelect.value;
     const taskDuration = document.getElementById('task_duration').value;
     const taskId = taskIdCounter++;
@@ -27,8 +28,8 @@ document.getElementById('generate-task').addEventListener('click', function(even
     event.preventDefault();
 
     const taskName = generateRandomWord(8);
-    const taskDeadline = ''; // Keep taskDeadline as an empty string
-    const taskPriority = 0;
+    const taskDeadline = '';
+    const taskPriority = getWeightedPriority();
     const taskDuration = getRandomInt(1, 8);
     const taskId = taskIdCounter++;
 
@@ -46,13 +47,25 @@ document.getElementById('generate-task').addEventListener('click', function(even
     addTaskRow(taskId, taskName, taskDeadline, taskPriority, projectId, taskOrder, taskDuration);
 });
 
-
 function getNextTaskOrderForProject(projectId) {
     if (!projectTaskOrderCount[projectId]) {
         projectTaskOrderCount[projectId] = 1;
     }
     return projectTaskOrderCount[projectId]++;
 }
+
+function getWeightedPriority() {
+    const randomNumber = Math.random();
+
+    if (randomNumber < 0.7) {
+        return 0;
+    } else if (randomNumber < 0.9) {
+        return 1;
+    } else {
+        return 2;
+    }
+}
+
 
 function addTaskRow(taskId, taskName, taskDeadline, taskPriority, projectId, taskOrder, taskDuration) {
     const formattedDeadline = taskDeadline ? new Date(taskDeadline).toLocaleDateString('en-US', {

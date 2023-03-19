@@ -75,11 +75,11 @@ function getTasks() {
   for (let i = 1; i < taskTable.rows.length; i++) {
     const row = taskTable.rows[i];
     const taskId = parseInt(row.cells[0].textContent.trim());
-    const projectId = parseInt(row.cells[4].textContent.trim());
     const taskName = row.cells[1].textContent.trim();
-    const taskDuration = parseInt(row.cells[6].textContent.trim());
-    const taskPriority = parseInt(row.cells[3].textContent.trim());
     const taskDeadline = row.cells[2].textContent.trim() ? new Date(row.cells[5].textContent.trim()) : null;
+    const taskPriority = parseInt(row.cells[3].textContent.trim());
+    const projectId = parseInt(row.cells[4].textContent.trim());
+    const taskDuration = parseInt(row.cells[6].textContent.trim());
 
     const task = {
       id: taskId,
@@ -96,7 +96,6 @@ function getTasks() {
   return tasks;
 }
 
-
 function assignTasks(schedule, tasks) {
   tasks.forEach(task => {
     let remainingDuration = task.duration;
@@ -105,23 +104,27 @@ function assignTasks(schedule, tasks) {
       const day = schedule[i];
 
       if (day.workTime > 0) {
-        const taskDuration = Math.min(remainingDuration, day.workTime);
+        const taskDuration = Math.min(remainingDuration, day.workTime - day.workload);
 
-        day.remainingTime = day.workTime - taskDuration;
         day.workload += taskDuration;
-        day.tasks.push({
-          id: task.id,
-          name: task.name,
-          duration: taskDuration,
-        });
-
         remainingDuration -= taskDuration;
+
+        if (taskDuration > 0) {
+          day.tasks.push({
+            id: task.id,
+            name: task.name,
+            duration: taskDuration,
+            priority: task.priority,
+          });
+        }
       }
     }
   });
 
   return schedule;
 }
+
+
 
 function displayEmployeePlanning(schedule) {
   const employeePlanningTable = document.getElementById("employee-planning-table");
@@ -139,7 +142,10 @@ function displayEmployeePlanning(schedule) {
       <td>${day.workTime}</td>
       <td>${day.workload}</td>
       <td>${day.remainingTime}</td>
-      <td>${day.tasks.map(task => `${task.name} id:${task.id} p:${task.priority} d:${task.duration}`).join(", ")}</td>
+      <td>${day.tasks.map(task => `${task.id}`).join("<br>")}</td>
+      <td>${day.tasks.map(task => `${task.name}`).join("<br>")}</td>
+      <td>${day.tasks.map(task => `${task.priority}`).join("<br>")}</td>
+      <td>${day.tasks.map(task => `${task.duration}`).join("<br>")}</td>
     `;
   });
 }
