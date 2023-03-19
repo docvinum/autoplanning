@@ -27,10 +27,8 @@ document.getElementById('generate-task').addEventListener('click', function(even
     event.preventDefault();
 
     const taskName = generateRandomWord(8);
-    const taskDeadline = '';
+    const taskDeadline = ''; // Keep taskDeadline as an empty string
     const taskPriority = 0;
-    // const taskDeadline = new Date(new Date().getTime() + 8 * 24 * 60 * 60 * 1000);
-    // const taskPriority = getRandomInt(0, 2);
     const taskDuration = getRandomInt(1, 8);
     const taskId = taskIdCounter++;
 
@@ -49,7 +47,6 @@ document.getElementById('generate-task').addEventListener('click', function(even
 });
 
 
-
 function getNextTaskOrderForProject(projectId) {
     if (!projectTaskOrderCount[projectId]) {
         projectTaskOrderCount[projectId] = 1;
@@ -58,11 +55,18 @@ function getNextTaskOrderForProject(projectId) {
 }
 
 function addTaskRow(taskId, taskName, taskDeadline, taskPriority, projectId, taskOrder, taskDuration) {
+    const formattedDeadline = taskDeadline ? new Date(taskDeadline).toLocaleDateString('en-US', {
+        weekday: 'short',
+        month: 'short',
+        day: 'numeric',
+        year: 'numeric',
+    }) : '';
+
     const newRow = taskTable.insertRow(-1);
     newRow.innerHTML = `
         <td>${taskId}</td>
         <td>${taskName}</td>
-        <td>${taskDeadline}</td>
+        <td>${formattedDeadline}</td>
         <td>${taskPriority}</td>
         <td>${projectId}</td>
         <td>${taskOrder}</td>
