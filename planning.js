@@ -105,28 +105,25 @@ function assignTasks(schedule, tasks) {
     for (let i = 0; i < schedule.length && remainingDuration > 0; i++) {
       const day = schedule[i];
 
-      if (day.workTime > 0) {
-        const taskDuration = Math.min(remainingDuration, day.workTime - day.workload);
+      if (day.remainingTime > 0) {
+        const taskDuration = Math.min(remainingDuration, day.remainingTime);
 
+        day.remainingTime -= taskDuration;
         day.workload += taskDuration;
-        remainingDuration -= taskDuration;
+        day.tasks.push({
+          id: task.id,
+          name: task.name,
+          duration: taskDuration,
+          priority: task.priority // Add task priority
+        });
 
-        if (taskDuration > 0) {
-          day.tasks.push({
-            id: task.id,
-            name: task.name,
-            duration: taskDuration,
-            priority: task.priority,
-          });
-        }
+        remainingDuration -= taskDuration;
       }
     }
   });
 
   return schedule;
 }
-
-
 
 function displayEmployeePlanning(schedule) {
   const employeePlanningTable = document.getElementById("employee-planning-table");
