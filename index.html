@@ -3,6 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
     <title>Auto Planning</title>
     <style>
         label, input, button {
@@ -93,16 +94,21 @@
     </tr>
 </table>
 
-<h3>Employee Planning</h3>
-    <button id="autoplanning">Auto Planning</button>
-<table id="employee-planning-table">
+<h3 class="mb-3">Employee Planning</h3>
+<button id="autoplanning" class="btn btn-primary mb-3">Auto Planning</button>
+<table id="employee-planning-table" class="table table-striped">
+  <thead class="thead-dark">
     <tr>
-        <th>Date</th>
-        <th>Work Time</th>
-        <th>Workload</th>
-        <th>Remaining Time</th>
-        <th>Tasks</th>
+      <th>Date</th>
+      <th>Work Time</th>
+      <th>Workload</th>
+      <th>Remaining Time</th>
+      <th>Tasks</th>
     </tr>
+  </thead>
+  <tbody>
+    <!-- Table rows go here -->
+  </tbody>
 </table>
 
 <script src="utilities.js"></script>
