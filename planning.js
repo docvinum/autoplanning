@@ -60,6 +60,7 @@ function getEmployeeSchedule() {
     schedule.push({
       date,
       workTime,
+      remainingTime: workTime, // Initialize remainingTime as workTime
       workload: 0, // Initialize workload as 0
       tasks: [],
     });
@@ -67,6 +68,7 @@ function getEmployeeSchedule() {
 
   return schedule;
 }
+
 
 function getTasks() {
   const taskTable = document.getElementById('task-table');
