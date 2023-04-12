@@ -141,26 +141,24 @@ function getTasks() {
 }
 
 function assignTasks(schedule, tasks) {
-  const taskOrder = [];
   const projectsByDeadline = getProjects().sort((a, b) => a.deadline - b.deadline);
 
+  // Create taskOrder
+  const taskOrder = [];
+
   // Add tasks with priority 2 to taskOrder
-  for (const project of projectsByDeadline) {
-    const priority2Tasks = tasks
-      .filter(task => task.projectId === project.id && task.priority === 2)
-      .sort((a, b) => a.id - b.id);
-    taskOrder.push(...priority2Tasks);
-  }
+  const priority2Tasks = tasks.filter(task => task.priority === 2);
+  taskOrder.push(...priority2Tasks);
 
   // Add the other tasks to taskOrder
   for (const project of projectsByDeadline) {
     const otherTasks = tasks
-      .filter(task => task.projectId === project.id && !taskOrder.includes(task))
+      .filter(task => task.projectId === project.id && !priority2Tasks.includes(task))
       .sort((a, b) => a.id - b.id);
     taskOrder.push(...otherTasks);
   }
 
-  console.log('Task Order:', taskOrder); // Print the task order
+  console.log('Task Order:', taskOrder);
 
   // Assign tasks from taskOrder to the planning
   for (const task of taskOrder) {
@@ -188,7 +186,6 @@ function assignTasks(schedule, tasks) {
 
   return schedule;
 }
-
 
 
 
